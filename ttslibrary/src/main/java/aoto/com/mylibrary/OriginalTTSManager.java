@@ -23,14 +23,14 @@ public class OriginalTTSManager implements WhyTTS{
     private long charStep=225;
     private long markStep=300;
 
-    private OriginalTTSManager(Context context){
+    private OriginalTTSManager(Context context, String engine){
         mSpeech=new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 Log.e(TAG, "onInit: success" );
                 //mSpeech.setSpeechRate(1.0f); 默认就是1.0f
             }
-        });
+        },engine);
     }
 
     /**
@@ -38,11 +38,11 @@ public class OriginalTTSManager implements WhyTTS{
      * @param context
      * @return
      */
-    public static WhyTTS getInstance(Context context){
+    public static WhyTTS getInstance(Context context, String engine){
         if(whyTTS==null){
             synchronized (OriginalTTSManager.class){
                 if(whyTTS==null){
-                    whyTTS=new OriginalTTSManager(context);
+                    whyTTS=new OriginalTTSManager(context,engine);
                 }
             }
         }

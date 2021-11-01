@@ -27,37 +27,42 @@ public class MediaTTSManager implements WhyTTS {
     private HashMap<String, String> myHashRender = new HashMap();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private MediaTTSManager(Context context) {
+    private MediaTTSManager(Context context, String engine) {
         this.mContext = context;
         wavPath = Environment.getExternalStorageDirectory() + "/temp.wav";
         player = new MediaPlayer();
-        initSpeech();
+        initSpeech(engine);
     }
+
 
     /**
      * Init TTS and set params
      */
-    private void initSpeech() {
+    private void initSpeech(String engine) {
         mSpeech = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 // mSpeech.setLanguage(Locale.ENGLISH);
             }
-        });
+        },engine);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static WhyTTS getInstance(Context context) {
+       return getInstance(context, null);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static WhyTTS getInstance(Context context, String engine) {
         if (manager == null) {
             synchronized (MediaTTSManager.class) {
                 if (manager == null) {
-                    manager = new MediaTTSManager(context);
+                    manager = new MediaTTSManager(context, engine);
                 }
             }
         }
         return manager;
     }
-
 
     @Override
     public void speak(String content) {
